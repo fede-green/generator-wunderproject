@@ -40,7 +40,7 @@
       "mocha": true
     }
   },
-  "repository": "federico.prato/generator-wunderproject",
+  "repository": "fredo-wunder/generator-wunderproject",
   "scripts": {
     "prepublish": "gulp prepublish",
     "test": "gulp"
