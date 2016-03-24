@@ -80,6 +80,12 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   install: function () {
-    this.installDependencies();
+    this.installDependencies({
+       bower: false,
+       npm: true,
+       callback: function () {
+         console.log('Everything is ready!');
+       }
+    });
   }
 });
