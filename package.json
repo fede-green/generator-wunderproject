@@ -19,7 +19,8 @@
   "dependencies": {
     "yeoman-generator": "^0.21.1",
     "chalk": "^1.0.0",
-    "yosay": "^1.0.2"
+    "yosay": "^1.0.2",
+    "wundertools": "wunderkraut/Wundertools.git#yotemplates"
   },
   "devDependencies": {
     "yeoman-assert": "^2.0.0",
