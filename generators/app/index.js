@@ -2,6 +2,7 @@
 var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 var yosay = require('yosay');
+var mkdirp = require('mkdirp');
 
 module.exports = yeoman.generators.Base.extend({
   prompting: function () {
@@ -14,6 +15,11 @@ module.exports = yeoman.generators.Base.extend({
     this.log(chalk.blue('So, now I\'ll ask you some questions. The defaults should be ok for most of cases, but especially about your project name, URL and IP... be creative!'));
 
     var prompts = [{
+      type: 'confirm',
+      name: 'path',
+      message: 'Should i create a new folder for your project?',
+      default: "Yes"
+    },{
       type: 'text',
       name: 'wunderMachina',
       message: 'What\'s the repo where to clone ansible from?',
@@ -31,7 +37,7 @@ module.exports = yeoman.generators.Base.extend({
     },{
       type: 'text',
       name: 'projectName',
-      message: 'What\'s the name of your project?',
+      message: 'What\'s the name of your project? (for now, please, no spaces :))',
       default: 'ansibleref'
     }, {
       type: 'text',
@@ -47,7 +53,7 @@ module.exports = yeoman.generators.Base.extend({
       type: 'confirm',
       name: 'buildSh_enabled',
       message: 'Do you want the build.sh to be enabled?',
-      default: true
+      default: "Yes"
     },{
       type: 'text',
       name: 'buildSh_branch',
@@ -65,27 +71,31 @@ module.exports = yeoman.generators.Base.extend({
 
   writing: function () {
     var props = this.props;
+    var subpath = "";
+
+    if(props.path == true){
+      console.log("creating the folder " + props.projectName);
+      mkdirp(props.projectName, function (err, subpath) {
+          if (err) console.error(err)
+          else {
+            console.log(chalk.green('Directory ' + props.projectName +' created!'));
+          }
+      });
+      subpath = props.projectName + "/";
+    }
     // WunderTools is in node_modules. Let's copy it!
     this.fs.copy(this.templatePath('../../../node_modules/WunderTools/'),
-      this.destinationPath('')
+      this.destinationPath(subpath)
     );
     // Removing the templated files.
-    this.fs.delete(this.destinationPath('conf/variables.yml'));
+    this.fs.delete(this.destinationPath(subpath + 'conf/setup.yml.tpl'));
     // Copying the templated files templating them.
     this.fs.copyTpl(
       this.templatePath('../../../node_modules/WunderTools/conf/setup.yml.tpl'),
-      this.destinationPath('conf/setup.yml'),
+      this.destinationPath(subpath +'conf/setup.yml'),
       this.props
     );
-  },
 
-  install: function () {
-    this.installDependencies({
-       bower: false,
-       npm: true,
-       callback: function () {
-         console.log('Everything is ready!');
-       }
-    });
-  }
+    console.log(chalk.green('Everything done! Thanks for using WunderTools. Now run a "simple" vagrant up and profit!'));
+  },
 });
