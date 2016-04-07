@@ -6,8 +6,8 @@
 First, install [Yeoman](http://yeoman.io) and generator-wunderproject using [npm](https://www.npmjs.com/) (we assume you have pre-installed [node.js](https://nodejs.org/)).
 
 ```bash
-npm install -g yo
-npm install -g generator-wunderproject
+sudo npm install -g yo
+sudo npm install -g https://github.com/fredo-wunder/generator-wunderproject
 ```
 
 Then generate your new project:
